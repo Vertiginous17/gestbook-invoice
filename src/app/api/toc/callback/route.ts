@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     body: new URLSearchParams({
       grant_type: "authorization_code",
       code: code,
-      redirect_uri: "http://localhost:3000/api/toc/callback", // tem de bater certo com o que enviaste antes
+      redirect_uri: "http://gestbook-invoice-f9ms.vercel.app/api/toc/callback", // tem de bater certo com o que enviaste antes
       client_id: process.env.NEXT_PUBLIC_TOC_CLIENT_ID!,
       client_secret: process.env.NEXT_PUBLIC_TOC_CLIENT_SECRET!,
     }),
@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
   console.log("Access Token:", access_token);
 
   // Criar cookie HttpOnly
-  const responseWithCookie = NextResponse.redirect("http://localhost:3000");
+  const responseWithCookie = NextResponse.redirect("http://gestbook-invoice-f9ms.vercel.app");
 
   responseWithCookie.cookies.set("toc_access_token", access_token, {
     httpOnly: true,

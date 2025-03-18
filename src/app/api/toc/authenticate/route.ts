@@ -4,7 +4,7 @@ export async function GET() {
   try {
     const clientId = process.env.NEXT_PUBLIC_TOC_CLIENT_ID;
     const redirectUri = encodeURIComponent(
-      "http://localhost:3000/api/toc/callback" // usa o teu callback local
+      process.env.NEXT_PUBLIC_TOC_REDIRECT_URI!
     );
 
     const authUrl = `https://app12.toconline.pt/oauth/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=commercial`;
