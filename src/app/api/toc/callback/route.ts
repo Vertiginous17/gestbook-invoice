@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const { access_token, refresh_token, expires_in } = data;
+  const { access_token, expires_in } = data;
 
   // Log do token no backend (apenas para debug - remove isto em produção!)
   console.log("Access Token:", access_token);

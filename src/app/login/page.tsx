@@ -18,7 +18,6 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // State for error messages
-  const router = useRouter(); // Use the Next.js router for redirection
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,9 +45,9 @@ export default function LoginPage() {
         const data = await res.json();
         setError(data.message); // If login failed on the backend, display error
       }
-    } catch (error: any) {
-      // Catch Firebase errors (e.g., wrong username or password)
+    } catch (error: unknown) {
       setError("Invalid username or password.");
+      console.error(error);
     }
   };
 

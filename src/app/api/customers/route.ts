@@ -1,4 +1,3 @@
-import { getAccessToken } from "@/utils/getAccessToken";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 

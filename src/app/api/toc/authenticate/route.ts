@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const clientId = process.env.NEXT_PUBLIC_TOC_CLIENT_ID;
     const redirectUri = encodeURIComponent(

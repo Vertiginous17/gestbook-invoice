@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const { username, password } = body;
 
     // Step 1: Validate the credentials
-    const userRecord = await validateUser(username, password);
+    const userRecord = await validateUser(username);
 
     if (userRecord) {
       // If the user is found, proceed with your redirect logic
@@ -29,16 +29,9 @@ export async function POST(req: Request) {
 }
 
 // Function to validate user by username (email) and password
-const validateUser = async (username: string, password: string) => {
+const validateUser = async (username: string) => {
   try {
-    // Check if the username exists in Firebase Authentication
     const userRecord = await admin.auth().getUserByEmail(username);
-
-    // If the user exists, we verify the password here
-    // Firebase Admin SDK doesn't directly verify passwords,
-    // so you will need to use Firebase client SDK for this part.
-    // Here we are assuming the password is correct since Firebase doesn't expose password directly.
-    // You can check the password on the client side using Firebase Auth client SDK
 
     return userRecord;
   } catch (error) {
