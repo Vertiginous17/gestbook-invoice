@@ -42,11 +42,9 @@ export default function Page() {
       if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
         return value;
       }
-
-      // You could add more parsing here if needed
     }
 
-    return ""; // fallback if none of the above worked
+    return "";
   };
 
   const { isLoading } = useAuthToken();
