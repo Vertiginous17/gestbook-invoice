@@ -32,10 +32,12 @@ export type GetClientsProps = {
       region?: string;
       subtype?: string;
     };
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     relationships: any;
   };
 };
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const getClients = async (data: any) => {
   const response = await fetch(process.env.NEXT_PUBLIC_GET_CLIENTS || "");
   const client = await response.json();
@@ -46,7 +48,9 @@ export const getClients = async (data: any) => {
     return [];
   }
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const matchingClients = client.data.filter((item: any) => {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     return data.some((foo: any) => {
       return (
         item.attributes.tax_registration_number.toString() ===

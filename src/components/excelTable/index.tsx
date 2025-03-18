@@ -3,9 +3,12 @@ import Image from "next/image";
 import React from "react";
 
 export type IExcelTable = {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   data: any;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   rawData: any;
   setData: React.Dispatch<React.SetStateAction<Array<GetClientsProps>>>;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   address: any;
 };
 
@@ -16,10 +19,12 @@ export const ExcelTable = ({
   address,
 }: IExcelTable) => {
   const handleUpdateTable = async () => {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     const clients: any = await getClients(data);
-
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     const updatedData = data.map((item: any) => {
       const client = clients.find(
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         (client: any) =>
           client.attributes.tax_registration_number.toString() ===
           item.customer_tax_registration_number.toString()
@@ -28,6 +33,7 @@ export const ExcelTable = ({
       if (!client) return item;
 
       const foundAddress = address.find(
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         (element: any) =>
           element.id === client.relationships.main_address.data.id
       );
@@ -78,8 +84,10 @@ export const ExcelTable = ({
               </tr>
             </thead>
             <tbody>
+              {/* eslint-disable @typescript-eslint/no-explicit-any */}
               {rawData.slice(1).map((row: any, rowIndex: number) => (
                 <tr key={rowIndex} className="relative hover:bg-gray-50">
+                  {/* eslint-disable @typescript-eslint/no-explicit-any */}
                   {row.map((cell: any, colIndex: any) => (
                     <td
                       key={colIndex}
