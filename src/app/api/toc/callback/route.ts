@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     body: new URLSearchParams({
       grant_type: "authorization_code",
       code: code,
-      redirect_uri: "http://gestbook-invoice-f9ms.vercel.app/api/toc/callback", // tem de bater certo com o que enviaste antes
+      redirect_uri: process.env.NEXT_PUBLIC_TOC_REDIRECT_URI!,
       client_id: process.env.NEXT_PUBLIC_TOC_CLIENT_ID!,
       client_secret: process.env.NEXT_PUBLIC_TOC_CLIENT_SECRET!,
     }),
