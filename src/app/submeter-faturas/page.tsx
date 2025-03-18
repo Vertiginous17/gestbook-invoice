@@ -10,8 +10,10 @@ import { toast } from "sonner";
 import * as XLSX from "xlsx";
 
 export default function Page() {
-  const [data, setData] = useState([]);
-  const [rawData, setRawData] = useState([]);
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const [data, setData] = useState<any>([]);
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const [rawData, setRawData] = useState<any>([]);
   const [address, setAddress] = useState([]);
 
   const formatDate = (value: unknown): string => {
