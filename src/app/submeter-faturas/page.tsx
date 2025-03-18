@@ -49,6 +49,7 @@ export default function Page() {
 
   const { isLoading } = useAuthToken();
 
+  // @ts-ignore
   const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
 
@@ -63,6 +64,7 @@ export default function Page() {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
 
+      // @ts-ignore
       const rawData: Array<any> = XLSX.utils.sheet_to_json(worksheet, {
         header: 1,
       });
@@ -135,7 +137,7 @@ export default function Page() {
 
   useEffect(() => {
     const fetchAddress = async () => {
-      const address: any = await getAddress();
+      const address = await getAddress();
 
       if (address) {
         setAddress(address);
