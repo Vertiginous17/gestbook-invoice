@@ -1,7 +1,9 @@
 "use client";
 import { Alert } from "@/components/alert/alert";
 import { ExcelTable } from "@/components/excelTable";
+import { Loader } from "@/components/loader";
 import { getAddress } from "@/utils/getAddress";
+import { getAuthToken } from "@/utils/getAuthToken";
 import {
   createDocumentoVenda,
   getClients,
@@ -48,6 +50,8 @@ export default function Page() {
 
     return ""; // fallback if none of the above worked
   };
+
+  const { isLoading } = getAuthToken();
 
   const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
@@ -108,7 +112,7 @@ export default function Page() {
               unit_price: 1,
             },
           ],
-          customer_country: ""
+          customer_country: "",
         };
         headers.forEach((header, index) => {
           if (header === "Valor (sem IVA)") {
@@ -154,37 +158,45 @@ export default function Page() {
   };
 
   return (
-    <div className="">
-      <h1 className="text-2xl font-bold mb-6">Upload do Ficheiro Excel</h1>
-
-      {/* Custom Styled File Input */}
-      <input
-        type="file"
-        accept=".ods, .xlsx, .xls, .csv"
-        onChange={handleFileUpload}
-        className="file-input mb-6 cursor-pointer px-4 py-2 border rounded-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-      />
-
-      <ExcelTable
-        data={data}
-        rawData={rawData}
-        setData={setData}
-        address={address}
-      />
-      {/* Custom Styled Button */}
-      {rawData.length ? (
-        <div>
-          <Alert
-            buttonText="Submeter Faturas"
-            title="Está certo que quer continuar?"
-            description="Vai submeter faturas"
-            leftAction="Cancelar"
-            rightAction="Confirmar"
-            handleRightClickAction={handleSubmitFaturas}
-            data={data}
-          />
+    <>
+      {isLoading ? (
+        <div className="w-1/2">
+          <Loader />
         </div>
-      ) : null}
-    </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center gap-4">
+          <h1 className="text-2xl font-bold mb-6">Upload do Ficheiro Excel</h1>
+
+          {/* Custom Styled File Input */}
+          <input
+            type="file"
+            accept=".ods, .xlsx, .xls, .csv"
+            onChange={handleFileUpload}
+            className="file-input mb-6 cursor-pointer px-4 py-2 border rounded-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+          />
+
+          <ExcelTable
+            data={data}
+            rawData={rawData}
+            setData={setData}
+            address={address}
+          />
+          {/* Custom Styled Button */}
+          {rawData.length ? (
+            <div>
+              <Alert
+                buttonText="Submeter Faturas"
+                title="Está certo que quer continuar?"
+                description="Vai submeter faturas"
+                leftAction="Cancelar"
+                rightAction="Confirmar"
+                handleRightClickAction={handleSubmitFaturas}
+                data={data}
+              />
+            </div>
+          ) : null}
+        </div>
+      )}
+    </>
   );
 }

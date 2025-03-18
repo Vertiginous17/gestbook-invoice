@@ -1,11 +1,14 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
 const createFatura = process.env.NEXT_PUBLIC_CREATE_INVOICE || "";
-const token = process.env.NEXT_PUBLIC_TOKEN_API || "";
 
 export async function POST(request: Request) {
   try {
+    const cookieStore = cookies();
+    const token = (await cookieStore).get("toc_access_token");
+
     // Parse the request body from the frontend
     const props = await request.json();
 
@@ -13,7 +16,7 @@ export async function POST(request: Request) {
     const response = await fetch(`${apiUrl}${createFatura}`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token?.value}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(props),

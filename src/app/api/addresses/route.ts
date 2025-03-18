@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
 const getAddress = process.env.NEXT_PUBLIC_GET_ADDRESS || "";
 
 export async function GET() {
   try {
+    const cookieStore = cookies();
+    const token = (await cookieStore).get("toc_access_token");
+
     const response = await fetch(`${apiUrl}${getAddress}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN_API}`,
+        Authorization: `Bearer ${token?.value}`,
         "Content-Type": "application/json",
       },
     });
