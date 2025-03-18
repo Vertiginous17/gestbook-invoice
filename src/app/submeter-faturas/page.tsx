@@ -49,7 +49,7 @@ export default function Page() {
 
   const { isLoading } = useAuthToken();
 
-  // @ts-ignore
+  // @ts-expect-error
   const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
 
@@ -64,7 +64,7 @@ export default function Page() {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
 
-      // @ts-ignore
+      // @ts-expect-error
       const rawData: Array<any> = XLSX.utils.sheet_to_json(worksheet, {
         header: 1,
       });
