@@ -64,12 +64,6 @@ export const getClients = async (data: any) => {
 };
 
 export const createDocumentoVenda = async (props: Array<GetClientsProps>) => {
-  const response = await fetch(process.env.NEXT_PUBLIC_GET_CLIENTS || "");
-
-  const client = await response.json();
-
-  console.log(client);
-
   props.map(async (item) => {
     const body = {
       document_type: "FT",

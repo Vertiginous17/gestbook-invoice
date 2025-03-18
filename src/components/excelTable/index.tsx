@@ -1,6 +1,7 @@
 import { getClients, GetClientsProps } from "@/utils/getClients";
 import Image from "next/image";
 import React from "react";
+import { toast } from "sonner";
 
 export type IExcelTable = {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -8,6 +9,7 @@ export type IExcelTable = {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   rawData: any;
   setData: React.Dispatch<React.SetStateAction<Array<GetClientsProps>>>;
+  handleUpdateAddress: () => void;
   /* eslint-disable @typescript-eslint/no-explicit-any */
   address: any;
 };
@@ -17,11 +19,13 @@ export const ExcelTable = ({
   rawData,
   setData,
   address,
+  handleUpdateAddress,
 }: IExcelTable) => {
   const handleUpdateTable = async () => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     const clients: any = await getClients(data);
     /* eslint-disable @typescript-eslint/no-explicit-any */
+
     const updatedData = data.map((item: any) => {
       const client = clients.find(
         /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -30,7 +34,14 @@ export const ExcelTable = ({
           item.customer_tax_registration_number.toString()
       );
 
-      if (!client) return item;
+      if (!client) {
+        toast(
+          `Cliente com o nome "${
+            client.attributes.business_name
+          }" ou NIF "${client.attributes.tax_registration_number.toString()}" não encontrado`
+        );
+        return item;
+      }
 
       const foundAddress = address.find(
         /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -38,14 +49,16 @@ export const ExcelTable = ({
           element.id === client.relationships.main_address.data.id
       );
 
+      toast("Clientes atualizados");
+
+      handleUpdateAddress();
+
       return {
         ...item,
         address: foundAddress,
         customer_country: client.attributes.country_iso_alpha_2,
       };
     });
-
-    console.log(updatedData);
 
     setData(updatedData);
   };

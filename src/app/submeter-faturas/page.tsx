@@ -15,6 +15,7 @@ export default function Page() {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const [rawData, setRawData] = useState<any>([]);
   const [address, setAddress] = useState([]);
+  const [isUpdateAddress, setIsUpdateAddress] = useState<boolean>(false);
 
   const formatDate = (value: unknown): string => {
     // Handle numbers (Excel serial dates)
@@ -155,29 +156,42 @@ export default function Page() {
     console.log(fatura);
   };
 
+  const handleUpdateAddress = () => {
+    setIsUpdateAddress(true);
+  };
+
+  console.log(isUpdateAddress);
+
   return (
-    <>
+    <div
+      className={
+        isLoading ? "flex items-center justify-center h-screen" : "relative"
+      }
+    >
       {isLoading ? (
         <div className="w-1/2">
           <Loader />
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center gap-4">
+        <div className="flex flex-col gap-4">
           <h1 className="text-2xl font-bold mb-6">Upload do Ficheiro Excel</h1>
 
           {/* Custom Styled File Input */}
-          <input
-            type="file"
-            accept=".ods, .xlsx, .xls, .csv"
-            onChange={handleFileUpload}
-            className="file-input mb-6 cursor-pointer px-4 py-2 border rounded-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-          />
+          <div>
+            <input
+              type="file"
+              accept=".ods, .xlsx, .xls, .csv"
+              onChange={handleFileUpload}
+              className="file-input mb-6 cursor-pointer px-4 py-2 border rounded-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+            />
+          </div>
 
           <ExcelTable
             data={data}
             rawData={rawData}
             setData={setData}
             address={address}
+            handleUpdateAddress={handleUpdateAddress}
           />
           {/* Custom Styled Button */}
           {rawData.length ? (
@@ -195,6 +209,11 @@ export default function Page() {
           ) : null}
         </div>
       )}
-    </>
+      {isUpdateAddress ?? (
+        <div className="absolute left-0 bottom-0 bg-red-500">
+          <Loader />
+        </div>
+      )}
+    </div>
   );
 }

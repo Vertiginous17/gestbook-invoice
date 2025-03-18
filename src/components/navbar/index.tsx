@@ -4,7 +4,7 @@ import Link from "next/link";
 export const Navbar = () => {
   const links = [{ link: "/submeter-faturas", text: "Submeter Faturas" }];
   return (
-    <nav className="flex items-center justify-between w-full p-4">
+    <nav className="flex items-center justify-between w-full p-4 shadow-sm">
       {/* Mock Logo */}
       <Link href="/">
         <Image
