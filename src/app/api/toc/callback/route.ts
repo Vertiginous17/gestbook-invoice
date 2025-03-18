@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
   console.log("Access Token:", access_token);
 
   // Criar cookie HttpOnly
-  const responseWithCookie = NextResponse.redirect("http://gestbook-invoice-f9ms.vercel.app");
+  const responseWithCookie = NextResponse.redirect("http://gestbook-invoice.vercel.app");
 
   responseWithCookie.cookies.set("toc_access_token", access_token, {
     httpOnly: true,
