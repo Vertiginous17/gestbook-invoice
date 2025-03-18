@@ -10,9 +10,9 @@ import { toast } from "sonner";
 import * as XLSX from "xlsx";
 
 export default function Page() {
-  const [data, setData] = useState<any>([]);
-  const [rawData, setRawData] = useState<any>([]);
-  const [address, setAddress] = useState<any>([]);
+  const [data, setData] = useState([]);
+  const [rawData, setRawData] = useState([]);
+  const [address, setAddress] = useState([]);
 
   const formatDate = (value: unknown): string => {
     // Handle numbers (Excel serial dates)
@@ -94,7 +94,7 @@ export default function Page() {
 
       // Map each row to an object using headers as keys
       const dataObjects = rows.map((row) => {
-        let obj: GetClientsProps = {
+        const obj: GetClientsProps = {
           date: "",
           due_date: "",
           finalize: false,
