@@ -3,13 +3,9 @@ import { Alert } from "@/components/alert/alert";
 import { ExcelTable } from "@/components/excelTable";
 import { Loader } from "@/components/loader";
 import { getAddress } from "@/utils/getAddress";
-import { getAuthToken } from "@/utils/getAuthToken";
-import {
-  createDocumentoVenda,
-  getClients,
-  GetClientsProps,
-} from "@/utils/getClients";
-import React, { EffectCallback, useEffect, useState } from "react";
+import { useAuthToken } from "@/utils/useAuthToken";
+import { createDocumentoVenda, GetClientsProps } from "@/utils/getClients";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 
@@ -18,7 +14,7 @@ export default function Page() {
   const [rawData, setRawData] = useState<any>([]);
   const [address, setAddress] = useState<any>([]);
 
-  const formatDate = (value: any): string => {
+  const formatDate = (value: unknown): string => {
     // Handle numbers (Excel serial dates)
     if (typeof value === "number") {
       const jsDate = XLSX.SSF.parse_date_code(value);
@@ -51,7 +47,7 @@ export default function Page() {
     return ""; // fallback if none of the above worked
   };
 
-  const { isLoading } = getAuthToken();
+  const { isLoading } = useAuthToken();
 
   const handleFileUpload = (e: any) => {
     const file = e.target.files[0];

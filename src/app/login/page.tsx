@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
 import { auth, signInWithEmailAndPassword } from "@/lib/firebase";
 
 export default function LoginPage() {

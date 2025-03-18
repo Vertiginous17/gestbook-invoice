@@ -1,4 +1,3 @@
-import { getAddress } from "@/utils/getAddress";
 import { getClients, GetClientsProps } from "@/utils/getClients";
 import Image from "next/image";
 import React from "react";

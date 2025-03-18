@@ -1,4 +1,3 @@
-const idPesquisa = ["6172673"];
 import { toast } from "sonner";
 
 export type GetClientsProps = {
@@ -10,7 +9,7 @@ export type GetClientsProps = {
   finalize: boolean;
   lines: Array<{
     item_type: string;
-    description: String;
+    description: string;
     quantity: number;
     unit_price: number;
   }>;

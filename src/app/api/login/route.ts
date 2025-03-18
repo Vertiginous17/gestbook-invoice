@@ -4,7 +4,7 @@ import admin from "../../../../firebaseAdmin";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { username, password } = body;
+    const { username } = body;
 
     // Step 1: Validate the credentials
     const userRecord = await validateUser(username);

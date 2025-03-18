@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export const getAuthToken = () => {
+
+export const useAuthToken = () => {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true); // Track loading state
   const router = useRouter();

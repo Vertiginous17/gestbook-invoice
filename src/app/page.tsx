@@ -1,14 +1,14 @@
 "use client";
 
 import { Loader } from "@/components/loader";
-import { getAuthToken } from "@/utils/getAuthToken";
+import { useAuthToken } from "@/utils/useAuthToken";
 
 export default function Home() {
   const handleLogin = async () => {
     window.location.href = "/api/toc/authenticate";
   };
 
-  const { isLoading } = getAuthToken();
+  const { isLoading } = useAuthToken();
 
   return (
     <div className="flex items-center justify-center h-screen">
