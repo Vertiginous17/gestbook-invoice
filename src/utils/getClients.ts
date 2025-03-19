@@ -99,8 +99,7 @@ export const createDocumentoVenda = async (props: Array<GetClientsProps>) => {
         const error = await response.json();
         console.error("Error creating Fatura:", error);
       } else {
-        const data = await response.json();
-        console.log("Fatura created successfully:", data);
+        toast("Fatura criada com sucesso");
       }
     } catch (error) {
       console.error("Error making request to create Fatura:", error);

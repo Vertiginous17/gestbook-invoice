@@ -2,7 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const Navbar = () => {
-  const links = [{ link: "/submeter-faturas", text: "Submeter Faturas" }];
+  const links = [
+    { link: "/submeter-faturas", text: "Submeter Faturas" },
+    { link: "/documentos-venda", text: "Documentos Venda" },
+  ];
   return (
     <nav className="flex items-center justify-between w-full p-4 shadow-sm">
       {/* Mock Logo */}

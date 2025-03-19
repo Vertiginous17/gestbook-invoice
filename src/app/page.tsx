@@ -12,7 +12,7 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-muted">
+      <div className="flex items-center justify-center h-screen">
         <div className="w-1/3">
           <Loader />
         </div>
@@ -27,7 +27,7 @@ export default function Home() {
           Bem-vindo
         </h1>
         <p className="text-gray-600 text-center text-lg">
-          Podes submmeter aqui as faturas de forma simples e automatizada.
+          Podes submeter aqui as faturas de forma simples e automatizada.
         </p>
 
         <div className="flex justify-center">
