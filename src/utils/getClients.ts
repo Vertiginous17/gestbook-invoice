@@ -35,8 +35,7 @@ export type GetClientsProps = {
       region?: string;
       subtype?: string;
     };
-    /* eslint-diable @typescript-eslint/no-explicit-any */
-    relationships: any;
+    relationships: unknown;
   };
 };
 
