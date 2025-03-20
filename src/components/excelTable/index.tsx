@@ -1,7 +1,7 @@
 import React from "react";
 
 export type IExcelTable = {
-  rawData: any;
+  rawData: Array<Array<string>>;
 };
 
 export const ExcelTable = ({ rawData }: IExcelTable) => {
@@ -22,11 +22,9 @@ export const ExcelTable = ({ rawData }: IExcelTable) => {
             </tr>
           </thead>
           <tbody>
-            {/* eslint-disable @typescript-eslint/no-explicit-any */}
-            {rawData.slice(1).map((row: any, rowIndex: number) => (
+            {rawData.slice(1).map((row: Array<string>, rowIndex: number) => (
               <tr key={rowIndex} className="relative hover:bg-gray-50">
-                {/* eslint-disable @typescript-eslint/no-explicit-any */}
-                {row.map((cell: any, colIndex: any) => (
+                {row.map((cell: string, colIndex: number) => (
                   <td
                     key={colIndex}
                     className="px-4 py-2 border-b border-gray-300 text-sm text-gray-600"

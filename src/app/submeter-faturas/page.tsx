@@ -14,14 +14,15 @@ import Image from "next/image";
 import { useAuthToken } from "@/utils/useAuthToken";
 import { useRouter } from "next/navigation";
 import { LoaderMiddlePage } from "@/components/loader/loaderMiddlePage";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
 export default function Page() {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const [data, setData] = useState<any>([]);
 
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const [rawData, setRawData] = useState<any>([]);
+  const [rawData, setRawData] = useState<Array<Array<string>>>([]);
   const [address, setAddress] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +30,8 @@ export default function Page() {
   const { token, isLoadingToken } = useAuthToken();
 
   const router = useRouter();
+  console.log("data");
+  console.log(data);
 
   const formatDate = (value: unknown): string => {
     // Handle numbers (Excel serial dates)
@@ -61,9 +64,11 @@ export default function Page() {
     return "";
   };
 
-  const handleUpdateTable = async () => {
+  const handleUpdateTable = async (data) => {
     const clients: any = await getClients(data);
     /* eslint-disable @typescript-eslint/no-explicit-any */
+
+    console.log("clients: ", clients);
 
     const updatedData = data.map((item: any) => {
       const client = clients.find(
@@ -74,7 +79,7 @@ export default function Page() {
       );
 
       if (!client) {
-        toast(
+        toast.error(
           `Cliente com o nome "${
             client.attributes.business_name
           }" ou NIF "${client.attributes.tax_registration_number.toString()}" não encontrado`
@@ -94,18 +99,17 @@ export default function Page() {
         customer_country: client.attributes.country_iso_alpha_2,
       };
     });
-
-    setData(updatedData);
+    return updatedData;
   };
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  const handleFileUpload = async (e: any) => {
+  const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
 
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       const arrayBuffer = event?.target?.result;
       const workbook = XLSX.read(arrayBuffer, { type: "array" });
 
@@ -201,20 +205,26 @@ export default function Page() {
       });
 
       setData(dataObjects);
+
+      try {
+        setIsLoading(true);
+        await handleUpdateTable(dataObjects);
+        toast("Clientes atualizados", {
+          description: "As moradas dos clientes foram atualizadas com sucesso",
+          action: {
+            label: "x",
+            onClick: () => console.log("x"),
+          },
+        });
+        setIsSubmitVisible(true);
+        setIsLoading(false);
+      } catch (e) {
+        setIsLoading(false);
+        console.error(e);
+      }
     };
 
     reader.readAsArrayBuffer(file);
-
-    try {
-      setIsLoading(true);
-      await handleUpdateTable();
-      toast("Clientes atualizados");
-      setIsSubmitVisible(true);
-      setIsLoading(false);
-    } catch (e) {
-      setIsLoading(false);
-      console.error(e);
-    }
   };
 
   useEffect(() => {
@@ -229,7 +239,7 @@ export default function Page() {
       if (address) {
         setAddress(address);
       } else {
-        toast("Error");
+        toast.error("Erro a obter endereços.");
       }
       setIsLoading(false);
     };
@@ -244,12 +254,7 @@ export default function Page() {
   return (
     <div className={"relative min-h-screen"}>
       {isLoading && <LoaderMiddlePage />}
-      <div className="flex flex-col gap-8 mx-auto">
-        {/* Page Title */}
-        <h1 className="text-3xl font-bold text-center text-gray-800">
-          Upload do Ficheiro Excel
-        </h1>
-
+      <div className="flex flex-col gap-8 mx-auto mt-8">
         {/* Step 1 - Download Example */}
         <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-gray-700">
@@ -283,14 +288,29 @@ export default function Page() {
             Passo 2: Upload do ficheiro preenchido
           </h2>
           <p className="text-gray-600">
-            Selecionar o ficheiro editado e guardado no computador.
+            Selecionar o ficheiro editado e fazer upload abaixo para continuar
           </p>
-          <input
-            type="file"
-            accept=".ods, .xlsx, .xls, .csv"
-            onChange={handleFileUpload}
-            className="file-input cursor-pointer px-4 py-2 border rounded-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-          />
+          <div>
+            <Label
+              htmlFor="file-upload"
+              className={cn(
+                "inline-flex items-center justify-center",
+                "bg-indigo-600 text-white font-medium",
+                "px-5 py-2 rounded-md shadow-sm",
+                "hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500",
+                "transition-colors cursor-pointer"
+              )}
+            >
+              Escolher Ficheiro
+            </Label>
+            <input
+              id="file-upload"
+              type="file"
+              accept=".ods, .xlsx, .xls, .csv"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+          </div>
         </div>
 
         {/* Step 3 - Review and Submit */}

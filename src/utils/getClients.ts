@@ -47,7 +47,7 @@ export const getClients = async (data: any) => {
 
   if (!client?.data) {
     console.error("No client data returned from API");
-    toast("Erro ao obter clientes");
+    toast.error("Erro ao obter clientes");
     return [];
   }
 
