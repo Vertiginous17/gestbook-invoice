@@ -2,20 +2,29 @@
 import { Alert } from "@/components/alert/alert";
 import { ExcelTable } from "@/components/excelTable";
 import { getAddress } from "@/utils/getAddress";
-import { createDocumentoVenda, GetClientsProps } from "@/utils/getClients";
+import {
+  createDocumentoVenda,
+  getClients,
+  GetClientsProps,
+} from "@/utils/getClients";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import Image from "next/image";
 import { useAuthToken } from "@/utils/useAuthToken";
 import { useRouter } from "next/navigation";
+import { LoaderMiddlePage } from "@/components/loader/loaderMiddlePage";
 
 export default function Page() {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const [data, setData] = useState<any>([]);
+
+  const [isSubmitVisible, setIsSubmitVisible] = useState(false);
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const [rawData, setRawData] = useState<any>([]);
   const [address, setAddress] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const { token, isLoadingToken } = useAuthToken();
 
@@ -52,8 +61,45 @@ export default function Page() {
     return "";
   };
 
+  const handleUpdateTable = async () => {
+    const clients: any = await getClients(data);
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+
+    const updatedData = data.map((item: any) => {
+      const client = clients.find(
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        (client: any) =>
+          client.attributes.tax_registration_number.toString() ===
+          item.customer_tax_registration_number.toString()
+      );
+
+      if (!client) {
+        toast(
+          `Cliente com o nome "${
+            client.attributes.business_name
+          }" ou NIF "${client.attributes.tax_registration_number.toString()}" não encontrado`
+        );
+        return item;
+      }
+
+      const foundAddress = address.find(
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        (element: any) =>
+          element.id === client.relationships.main_address.data.id
+      );
+
+      return {
+        ...item,
+        address: foundAddress,
+        customer_country: client.attributes.country_iso_alpha_2,
+      };
+    });
+
+    setData(updatedData);
+  };
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  const handleFileUpload = (e: any) => {
+  const handleFileUpload = async (e: any) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -158,6 +204,17 @@ export default function Page() {
     };
 
     reader.readAsArrayBuffer(file);
+
+    try {
+      setIsLoading(true);
+      await handleUpdateTable();
+      toast("Clientes atualizados");
+      setIsSubmitVisible(true);
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
+      console.error(e);
+    }
   };
 
   useEffect(() => {
@@ -166,6 +223,7 @@ export default function Page() {
 
   useEffect(() => {
     const fetchAddress = async () => {
+      setIsLoading(true);
       const address = await getAddress();
 
       if (address) {
@@ -173,6 +231,7 @@ export default function Page() {
       } else {
         toast("Error");
       }
+      setIsLoading(false);
     };
 
     fetchAddress();
@@ -184,6 +243,7 @@ export default function Page() {
 
   return (
     <div className={"relative min-h-screen"}>
+      {isLoading && <LoaderMiddlePage />}
       <div className="flex flex-col gap-8 mx-auto">
         {/* Page Title */}
         <h1 className="text-3xl font-bold text-center text-gray-800">
@@ -249,23 +309,18 @@ export default function Page() {
             </p>
 
             {/* Excel Table */}
-            <ExcelTable
-              data={data}
-              rawData={rawData}
-              setData={setData}
-              address={address}
-            />
+            <ExcelTable rawData={rawData} />
 
-            {/* Submit Button */}
             <div className="flex justify-end">
               <Alert
                 buttonText="Submeter Faturas"
                 title="Está certo que quer continuar?"
-                description="Vai submeter faturas"
+                description="Isto irá submeter uma fatura para cada linha do ficheiro excel submetido"
                 leftAction="Cancelar"
                 rightAction="Confirmar"
                 handleRightClickAction={handleSubmitFaturas}
                 data={data}
+                isButtonActive={isSubmitVisible}
               />
             </div>
           </div>

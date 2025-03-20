@@ -20,6 +20,7 @@ type IAlertProps = {
   rightAction: string;
   handleRightClickAction?: (data: Array<GetClientsProps>) => void;
   data: Array<GetClientsProps>;
+  isButtonActive: boolean;
 };
 export const Alert = ({
   buttonText,
@@ -29,11 +30,15 @@ export const Alert = ({
   rightAction,
   handleRightClickAction,
   data,
+  isButtonActive,
 }: IAlertProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <button className="inline-flex items-center justify-center rounded-md bg-indigo-600 px-6 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        <button
+          disabled={!isButtonActive}
+          className="inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 hover:cursor-pointer bg-indigo-600"
+        >
           {buttonText}
         </button>
       </AlertDialogTrigger>
