@@ -1,4 +1,4 @@
-type IUserType = {
+export type IUserType = {
   type: string;
   id: string;
   attributes: {
@@ -18,38 +18,39 @@ type IUserType = {
     saft_import_id?: string;
     is_tax_exempt?: false;
     active?: boolean;
-    data?: {};
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    data?: any;
   };
   relationships: {
     addresses: {
       data: [
         {
-          type: "addresses";
-          id: "1471223";
+          type: string;
+          id: string;
         }
       ];
     };
     company: {
       data: {
-        type: "current_company";
-        id: "42328";
+        type: string;
+        id: string;
       };
     };
     defaults: {
       data: {
-        type: "customers_defaults";
-        id: "1460467";
+        type: string;
+        id: string;
       };
     };
     email_addresses: {
       data: [
         {
-          type: "email_addresses";
-          id: "136630";
+          type: string;
+          id: string;
         },
         {
-          type: "email_addresses";
-          id: "136631";
+          type: string;
+          id: string;
         }
       ];
     };
@@ -61,12 +62,12 @@ type IUserType = {
     };
     main_email_address: {
       data: {
-        type: "email_addresses";
-        id: "136630";
+        type: string;
+        id: string;
       };
     };
     tax_exemption_reason: {
-      data: null;
+      data?: string;
     };
   };
 };

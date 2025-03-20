@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { LoaderMiddlePage } from "@/components/loader/loaderMiddlePage";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { IUserType } from "@/types/types";
 
 export default function Page() {
   /* eslint-disable @typescript-eslint/no-explicit-any */
