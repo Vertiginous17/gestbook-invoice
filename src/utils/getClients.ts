@@ -29,19 +29,18 @@ export type GetClientsProps = {
       is_primary: boolean;
       is_saturday_workday: boolean;
       is_sunday_workday: boolean;
-      name: "Sede";
+      name: string;
       payroll_enumerations_tax_office_id?: string;
-      postcode: "4750-536";
+      postcode: string;
       region?: string;
       subtype?: string;
     };
-    /* eslint-disable @typescript-eslint/no-explicit-any */
+    /* eslint-diable @typescript-eslint/no-explicit-any */
     relationships: any;
   };
 };
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const getClients = async (data: any) => {
+export const getClients = async (data: Array<GetClientsProps>) => {
   const response = await fetch(process.env.NEXT_PUBLIC_GET_CLIENTS || "");
   const client = await response.json();
 
@@ -51,10 +50,8 @@ export const getClients = async (data: any) => {
     return [];
   }
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const matchingClients = client.data.filter((item: any) => {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    return data.some((foo: any) => {
+  const matchingClients = client.data.filter((item) => {
+    return data.some((foo) => {
       return (
         item.attributes.tax_registration_number.toString() ===
           foo.customer_tax_registration_number.toString() &&

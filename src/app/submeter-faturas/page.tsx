@@ -30,8 +30,6 @@ export default function Page() {
   const { token, isLoadingToken } = useAuthToken();
 
   const router = useRouter();
-  console.log("data");
-  console.log(data);
 
   const formatDate = (value: unknown): string => {
     // Handle numbers (Excel serial dates)
@@ -64,16 +62,12 @@ export default function Page() {
     return "";
   };
 
-  const handleUpdateTable = async (data) => {
-    const clients: any = await getClients(data);
-    /* eslint-disable @typescript-eslint/no-explicit-any */
+  const handleUpdateTable = async (data: Array<GetClientsProps>) => {
+    const clients: Array<IUserType> = await getClients(data);
 
-    console.log("clients: ", clients);
-
-    const updatedData = data.map((item: any) => {
+    const updatedData = data.map((item) => {
       const client = clients.find(
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        (client: any) =>
+        (client) =>
           client.attributes.tax_registration_number.toString() ===
           item.customer_tax_registration_number.toString()
       );
@@ -81,8 +75,8 @@ export default function Page() {
       if (!client) {
         toast.error(
           `Cliente com o nome "${
-            client.attributes.business_name
-          }" ou NIF "${client.attributes.tax_registration_number.toString()}" não encontrado`
+            item.customer_business_name
+          }" ou NIF "${item.customer_tax_registration_number.toString()}" não encontrado`
         );
         return item;
       }
@@ -103,7 +97,7 @@ export default function Page() {
   };
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  const handleFileUpload = (e: any) => {
+  const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
