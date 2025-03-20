@@ -1,13 +1,14 @@
 "use client";
 import { Alert } from "@/components/alert/alert";
 import { ExcelTable } from "@/components/excelTable";
-import { Loader } from "@/components/loader";
 import { getAddress } from "@/utils/getAddress";
-import { useAuthToken } from "@/utils/useAuthToken";
 import { createDocumentoVenda, GetClientsProps } from "@/utils/getClients";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
+import Image from "next/image";
+import { useAuthToken } from "@/utils/useAuthToken";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -15,7 +16,10 @@ export default function Page() {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const [rawData, setRawData] = useState<any>([]);
   const [address, setAddress] = useState([]);
-  const [isUpdateAddress, setIsUpdateAddress] = useState<boolean>(false);
+
+  const { token, isLoadingToken } = useAuthToken();
+
+  const router = useRouter();
 
   const formatDate = (value: unknown): string => {
     // Handle numbers (Excel serial dates)
@@ -48,12 +52,9 @@ export default function Page() {
     return "";
   };
 
-  const { isLoading } = useAuthToken();
-
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
-
     if (!file) return;
 
     const reader = new FileReader();
@@ -70,32 +71,45 @@ export default function Page() {
         header: 1,
       });
 
+      const maxColumns = rawData.reduce(
+        (max, row) => Math.max(max, row.length),
+        0
+      );
+
       const updatedRawData = rawData.map((row, rowIndex) => {
+        const paddedRow = [...row];
+        while (paddedRow.length < maxColumns) {
+          paddedRow.push(null);
+        }
+
+        const normalizedRow = paddedRow.map((cell) => {
+          if (cell === undefined || cell === "") {
+            return null;
+          }
+          return cell;
+        });
+
         if (rowIndex > 0) {
-          // Normalize column 2 (index 2)
-          const thirdColumnValue = row[2];
+          const thirdColumnValue = normalizedRow[2];
           if (thirdColumnValue) {
-            row[2] = formatDate(thirdColumnValue);
+            normalizedRow[2] = formatDate(thirdColumnValue);
           }
 
-          // Normalize column 3 (index 3)
-          const fourthColumnValue = row[3];
+          const fourthColumnValue = normalizedRow[3];
           if (fourthColumnValue) {
-            row[3] = formatDate(fourthColumnValue);
+            normalizedRow[3] = formatDate(fourthColumnValue);
           }
         }
-        return row;
+
+        return normalizedRow;
       });
 
       setRawData(updatedRawData);
 
-      // Get headers from the first row
-      const headers: Array<string> = rawData[0];
+      const headers: Array<string> = updatedRawData[0];
 
-      // Get the rows from index 1 onwards
-      const rows = rawData.slice(1);
+      const rows = updatedRawData.slice(1);
 
-      // Map each row to an object using headers as keys
       const dataObjects = rows.map((row) => {
         const obj: GetClientsProps = {
           date: "",
@@ -109,6 +123,9 @@ export default function Page() {
               description: "",
               quantity: 1,
               unit_price: 1,
+              item_code: 0,
+              tax_percentage: 0,
+              settlement_expression: "",
             },
           ],
           customer_country: "",
@@ -126,15 +143,26 @@ export default function Page() {
             obj.date = row[index];
           } else if (header === "Data de vencimento") {
             obj.due_date = row[index];
+          } else if (header === "Código do Serviço") {
+            obj.lines[0].item_code = row[index];
+          } else if (header === "Percentagem IVA") {
+            obj.lines[0].tax_percentage = row[index];
+          } else if (header === "Desconto") {
+            obj.lines[0].settlement_expression = row[index];
           }
         });
         return obj;
       });
+
       setData(dataObjects);
     };
 
     reader.readAsArrayBuffer(file);
   };
+
+  useEffect(() => {
+    if (!isLoadingToken && !token) router.push("/login");
+  }, []);
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -151,51 +179,84 @@ export default function Page() {
   }, []);
 
   const handleSubmitFaturas = async () => {
-    const fatura = await createDocumentoVenda(data);
-
-    console.log(fatura);
+    await createDocumentoVenda(data);
   };
-
-  const handleUpdateAddress = () => {
-    setIsUpdateAddress(true);
-  };
-
-  console.log(isUpdateAddress);
 
   return (
-    <div
-      className={
-        isLoading ? "flex items-center justify-center h-screen" : "relative"
-      }
-    >
-      {isLoading ? (
-        <div className="w-1/2">
-          <Loader />
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4">
-          <h1 className="text-2xl font-bold mb-6">Upload do Ficheiro Excel</h1>
+    <div className={"relative min-h-screen"}>
+      <div className="flex flex-col gap-8 mx-auto">
+        {/* Page Title */}
+        <h1 className="text-3xl font-bold text-center text-gray-800">
+          Upload do Ficheiro Excel
+        </h1>
 
-          {/* Custom Styled File Input */}
-          <div>
-            <input
-              type="file"
-              accept=".ods, .xlsx, .xls, .csv"
-              onChange={handleFileUpload}
-              className="file-input mb-6 cursor-pointer px-4 py-2 border rounded-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
-            />
+        {/* Step 1 - Download Example */}
+        <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col gap-4">
+          <h2 className="text-xl font-semibold text-gray-700">
+            Passo 1: Descarregue o ficheiro de exemplo
+          </h2>
+          <p className="text-gray-600">
+            Faça o download do ficheiro de exemplo abaixo, edite os dados
+            localmente e guarde no seu computador.
+          </p>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-2 items-center">
+              <Image src="/excel-icon.svg" alt="excel" width={32} height={32} />
+              <span className="text-gray-700 font-medium">
+                Excel de exemplo
+              </span>
+            </div>
+            <a
+              href="Pasta.xlsx"
+              download="MyExampleDoc"
+              target="_blank"
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md transition-all"
+            >
+              Download
+            </a>
           </div>
+        </div>
 
-          <ExcelTable
-            data={data}
-            rawData={rawData}
-            setData={setData}
-            address={address}
-            handleUpdateAddress={handleUpdateAddress}
+        {/* Step 2 - Upload Edited File */}
+        <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col gap-4">
+          <h2 className="text-xl font-semibold text-gray-700">
+            Passo 2: Faça upload do ficheiro preenchido
+          </h2>
+          <p className="text-gray-600">
+            Selecione o ficheiro que acabou de editar e guardei no seu
+            computador.
+          </p>
+          <input
+            type="file"
+            accept=".ods, .xlsx, .xls, .csv"
+            onChange={handleFileUpload}
+            className="file-input cursor-pointer px-4 py-2 border rounded-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
           />
-          {/* Custom Styled Button */}
-          {rawData.length ? (
-            <div>
+        </div>
+
+        {/* Step 3 - Review and Submit */}
+        {rawData.length > 0 && (
+          <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col gap-6">
+            <h2 className="text-xl font-semibold text-gray-700">
+              Passo 3: Reveja e submeta os dados
+            </h2>
+            <p className="text-gray-600">
+              Confirme que os dados estão corretos antes de submeter as faturas.
+            </p>
+            <p className="text-sm text-red-600 bg-red-100 border border-red-300 rounded-md p-3">
+              ⚠️ Atenção: Por favor, atualize a tabela antes de submeter.
+            </p>
+
+            {/* Excel Table */}
+            <ExcelTable
+              data={data}
+              rawData={rawData}
+              setData={setData}
+              address={address}
+            />
+
+            {/* Submit Button */}
+            <div className="flex justify-end">
               <Alert
                 buttonText="Submeter Faturas"
                 title="Está certo que quer continuar?"
@@ -206,14 +267,9 @@ export default function Page() {
                 data={data}
               />
             </div>
-          ) : null}
-        </div>
-      )}
-      {isUpdateAddress ?? (
-        <div className="absolute left-0 bottom-0 bg-red-500">
-          <Loader />
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

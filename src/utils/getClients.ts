@@ -12,6 +12,9 @@ export type GetClientsProps = {
     description: string;
     quantity: number;
     unit_price: number;
+    item_code?: number;
+    tax_percentage?: number;
+    settlement_expression?: string;
   }>;
   address?: {
     id: string;

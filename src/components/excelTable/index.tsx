@@ -9,7 +9,6 @@ export type IExcelTable = {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   rawData: any;
   setData: React.Dispatch<React.SetStateAction<Array<GetClientsProps>>>;
-  handleUpdateAddress: () => void;
   /* eslint-disable @typescript-eslint/no-explicit-any */
   address: any;
 };
@@ -19,7 +18,6 @@ export const ExcelTable = ({
   rawData,
   setData,
   address,
-  handleUpdateAddress,
 }: IExcelTable) => {
   const handleUpdateTable = async () => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -50,8 +48,6 @@ export const ExcelTable = ({
       );
 
       toast("Clientes atualizados");
-
-      handleUpdateAddress();
 
       return {
         ...item,

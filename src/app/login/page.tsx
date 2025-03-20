@@ -12,14 +12,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { auth, signInWithEmailAndPassword } from "@/lib/firebase";
+import { LoaderMiddlePage } from "@/components/loader/loaderMiddlePage";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // State for error messages
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     try {
       // Use Firebase Authentication to sign in the user
@@ -42,16 +46,19 @@ export default function LoginPage() {
         window.location.href = res.url;
       } else {
         const data = await res.json();
-        setError(data.message); // If login failed on the backend, display error
+        setError(data.message);
+        setIsLoading(false);
       }
     } catch (error: unknown) {
       setError("Invalid username or password.");
+      setIsLoading(false);
       console.error(error);
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen relative">
+      {isLoading && <LoaderMiddlePage />}
       <Card className="w-full max-w-sm shadow-md">
         <CardHeader>
           <CardTitle className="text-center text-2xl">Login</CardTitle>

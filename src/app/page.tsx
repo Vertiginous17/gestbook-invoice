@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Home() {
-  const { isLoading } = useAuthToken();
+  const { isLoadingToken: isLoading } = useAuthToken();
   const router = useRouter();
 
   if (isLoading) {
@@ -21,10 +21,10 @@ export default function Home() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen px-4">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl p-8 space-y-6 animate-fade-in">
         <h1 className="text-3xl font-bold text-center text-gray-800">
-          Bem-vindo
+          Bem vindo
         </h1>
         <p className="text-gray-600 text-center text-lg">
           Podes submeter aqui as faturas de forma simples e automatizada.
@@ -50,6 +50,6 @@ export default function Home() {
           </Link>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
