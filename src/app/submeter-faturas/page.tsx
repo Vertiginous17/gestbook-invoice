@@ -193,11 +193,11 @@ export default function Page() {
         {/* Step 1 - Download Example */}
         <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-gray-700">
-            Passo 1: Descarregue o ficheiro de exemplo
+            Passo 1: Descarregar o ficheiro de exemplo
           </h2>
           <p className="text-gray-600">
-            Faça o download do ficheiro de exemplo abaixo, edite os dados
-            localmente e guarde no seu computador.
+            Fazer o download do ficheiro de exemplo abaixo, editar os dados
+            localmente e guardar no computador.
           </p>
           <div className="flex justify-between items-center">
             <div className="flex gap-2 items-center">
@@ -220,11 +220,10 @@ export default function Page() {
         {/* Step 2 - Upload Edited File */}
         <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-gray-700">
-            Passo 2: Faça upload do ficheiro preenchido
+            Passo 2: Upload do ficheiro preenchido
           </h2>
           <p className="text-gray-600">
-            Selecione o ficheiro que acabou de editar e guardei no seu
-            computador.
+            Selecionar o ficheiro editado e guardado no computador.
           </p>
           <input
             type="file"
@@ -238,13 +237,15 @@ export default function Page() {
         {rawData.length > 0 && (
           <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col gap-6">
             <h2 className="text-xl font-semibold text-gray-700">
-              Passo 3: Reveja e submeta os dados
+              Passo 3: Rever e submeter os dados
             </h2>
             <p className="text-gray-600">
-              Confirme que os dados estão corretos antes de submeter as faturas.
+              Confirmar que os dados estão corretos antes de submeter as
+              faturas.
             </p>
             <p className="text-sm text-red-600 bg-red-100 border border-red-300 rounded-md p-3">
-              ⚠️ Atenção: Por favor, atualize a tabela antes de submeter.
+              ⚠️ Atenção: Por favor, atualizar a tabela antes de submeter. Isto
+              irá preencher as moradas automaticamente.
             </p>
 
             {/* Excel Table */}
