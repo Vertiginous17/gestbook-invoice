@@ -327,10 +327,6 @@ export default function Page() {
               Confirmar que os dados estão corretos antes de submeter as
               faturas.
             </p>
-            <p className="text-sm text-red-600 bg-red-100 border border-red-300 rounded-md p-3">
-              ⚠️ Atenção: Por favor, atualizar a tabela antes de submeter. Isto
-              irá preencher as moradas automaticamente.
-            </p>
 
             {/* Excel Table */}
             <ExcelTable rawData={rawData} />
