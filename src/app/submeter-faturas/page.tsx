@@ -91,7 +91,6 @@ export default function Page() {
       return {
         ...item,
         address: foundAddress,
-        customer_business_name: client.attributes.business_name,
         // customer_country: client.attributes.country_iso_alpha_2,
       };
     });
