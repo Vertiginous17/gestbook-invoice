@@ -246,8 +246,13 @@ export default function Page() {
   }, []);
 
   const handleSubmitFaturas = async () => {
-    console.log(data);
-    await createDocumentoVenda(data);
+    try {
+      setIsLoading(true);
+      await createDocumentoVenda(data);
+      setIsLoading(false);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
