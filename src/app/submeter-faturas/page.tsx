@@ -88,12 +88,10 @@ export default function Page() {
           element.id === client.relationships.main_address.data.id
       );
 
-      console.log("client");
-      console.log(client);
-
       return {
         ...item,
         address: foundAddress,
+        customer_business_name: client.attributes.business_name,
         // customer_country: client.attributes.country_iso_alpha_2,
       };
     });
