@@ -12,7 +12,7 @@ export type GetClientsProps = {
     description: string;
     quantity: number;
     unit_price: number;
-    item_code?: number;
+    item_code: string;
     tax_percentage?: number;
     settlement_expression?: string;
   }>;
@@ -81,6 +81,9 @@ export const createDocumentoVenda = async (props: Array<GetClientsProps>) => {
           description: item.lines[0].description,
           quantity: 1,
           unit_price: item.lines[0].unit_price,
+          item_code: item.lines[0].item_code,
+          tax_percentage: item.lines[0].tax_percentage,
+          settlement_expression: item.lines[0].settlement_expression,
         },
       ],
     };

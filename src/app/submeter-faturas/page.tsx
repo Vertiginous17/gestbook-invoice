@@ -88,6 +88,9 @@ export default function Page() {
           element.id === client.relationships.main_address.data.id
       );
 
+      console.log("client");
+      console.log(client);
+
       return {
         ...item,
         address: foundAddress,
@@ -168,7 +171,7 @@ export default function Page() {
               description: "",
               quantity: 1,
               unit_price: 1,
-              item_code: 0,
+              item_code: "",
               tax_percentage: 0,
               settlement_expression: "",
             },
