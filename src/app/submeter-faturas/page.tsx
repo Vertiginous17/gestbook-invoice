@@ -182,8 +182,8 @@ export default function Page() {
             obj.lines[0].description = row[index];
           } else if (header === "NIF Cliente") {
             obj.customer_tax_registration_number = row[index];
-          } else if (header === "Nome cliente") {
-            obj.customer_business_name = row[index];
+          // } else if (header === "Nome cliente") {
+          //   obj.customer_business_name = row[index];
           } else if (header === "Data de emissão") {
             obj.date = row[index];
           } else if (header === "Data de vencimento") {
