@@ -3,7 +3,7 @@ import { toast } from "sonner";
 export type GetClientsProps = {
   customer_business_name: string;
   customer_tax_registration_number: string;
-  customer_country: string;
+  customer_country?: string;
   date: string;
   due_date: string;
   finalize: boolean;

@@ -91,7 +91,7 @@ export default function Page() {
       return {
         ...item,
         address: foundAddress,
-        customer_country: client.attributes.country_iso_alpha_2,
+        // customer_country: client.attributes.country_iso_alpha_2,
       };
     });
     return updatedData;
@@ -173,7 +173,7 @@ export default function Page() {
               settlement_expression: "",
             },
           ],
-          customer_country: "",
+          // customer_country: "",
         };
         headers.forEach((header, index) => {
           if (header === "Valor (sem IVA)") {
@@ -243,6 +243,7 @@ export default function Page() {
   }, []);
 
   const handleSubmitFaturas = async () => {
+    console.log(data);
     await createDocumentoVenda(data);
   };
 
