@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 
 export type GetClientsProps = {
-  customer_business_name: string;
+  customer_business_name?: string;
   customer_tax_registration_number: string;
   customer_country?: string;
   date: string;
@@ -68,7 +68,7 @@ export const createDocumentoVenda = async (props: Array<GetClientsProps>) => {
     const body = {
       document_type: "FT",
       customer_address_detail: item.address?.attributes.address_detail,
-      customer_business_name: item.customer_business_name,
+      // customer_business_name: item.customer_business_name,
       customer_city: item.address?.attributes.city,
       customer_country: item.customer_country,
       customer_postcode: item.address?.attributes.postcode,
