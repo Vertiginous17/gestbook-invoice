@@ -53,9 +53,10 @@ export const getClients = async (data: Array<GetClientsProps>) => {
     return data.some((foo) => {
       return (
         item.attributes.tax_registration_number.toString() ===
-          foo.customer_tax_registration_number.toString() &&
+        foo.customer_tax_registration_number.toString()
+        // &&
         // remove this logic once it's fully working
-        item.attributes.business_name === foo.customer_business_name
+        // item.attributes.business_name === foo.customer_business_name
       );
     });
   });
