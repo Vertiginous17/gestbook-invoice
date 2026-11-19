@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { IUserType } from "@/types/types";
 
 export default function Page() {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const [data, setData] = useState<any>([]);
 
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
@@ -220,7 +221,7 @@ export default function Page() {
     reader.readAsArrayBuffer(file);
   };
 
-  
+
   useEffect(() => {
     if (!isLoadingToken && !token) router.push("/login");
   }, []);
