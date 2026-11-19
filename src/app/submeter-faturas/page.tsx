@@ -220,6 +220,7 @@ export default function Page() {
     reader.readAsArrayBuffer(file);
   };
 
+  
   useEffect(() => {
     if (!isLoadingToken && !token) router.push("/login");
   }, []);
